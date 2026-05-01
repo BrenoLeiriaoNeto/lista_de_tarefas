@@ -17,7 +17,10 @@ class TasksList extends StatelessWidget {
           : ListView.builder(
               itemCount: tasks.length,
               itemBuilder: (context, index) {
-                return CardTasks(task: tasks[index]);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: CardTasks(task: tasks[index]),
+                );
               },
             ),
     );
