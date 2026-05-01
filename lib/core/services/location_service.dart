@@ -1,6 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:lista_de_tarefas/features/tasks/domain/geo_location.dart';
+import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 Future<GeoLocation> getCurrentLocation() async {
   final permission = await Geolocator.requestPermission();

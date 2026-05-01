@@ -4,3 +4,4 @@ export 'presentation/pages/tasks_list.dart';
 export 'presentation/widgets/card_tasks.dart';
 export 'presentation/widgets/no_tasks.dart';
 export 'domain/task.dart';
+export 'domain/geo_location.dart';
