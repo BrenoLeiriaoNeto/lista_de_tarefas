@@ -1,8 +1,10 @@
 class GeoLocation {
   final double latitude;
   final double longitude;
+  final String? address;
 
-  GeoLocation(this.latitude, this.longitude);
+  GeoLocation(this.latitude, this.longitude, {this.address});
 
-  String get formatted => 'Latitude: $latitude, Longitude: $longitude';
+  String get formatted =>
+      address ?? 'Latitude: $latitude, Longitude: $longitude';
 }
