@@ -2,30 +2,32 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
-Future<GeoLocation> getCurrentLocation() async {
-  final permission = await Geolocator.requestPermission();
+class LocationService {
+  Future<GeoLocation> getCurrentLocation() async {
+    final permission = await Geolocator.requestPermission();
 
-  if (permission == LocationPermission.denied ||
-      permission == LocationPermission.deniedForever) {
-    throw Exception("Permissão de localização negada");
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      throw Exception("Permissão de localização negada");
+    }
+
+    final position = await Geolocator.getCurrentPosition();
+
+    return GeoLocation(position.latitude, position.longitude);
   }
 
-  final position = await Geolocator.getCurrentPosition();
+  Future<String> getAddressFromLocation(GeoLocation location) async {
+    try {
+      final placemarks = await placemarkFromCoordinates(
+        location.latitude,
+        location.longitude,
+      );
 
-  return GeoLocation(position.latitude, position.longitude);
-}
+      final place = placemarks.first;
 
-Future<String> getAddressFromLocation(GeoLocation location) async {
-  try {
-    final placemarks = await placemarkFromCoordinates(
-      location.latitude,
-      location.longitude,
-    );
-
-    final place = placemarks.first;
-
-    return "${place.street}, ${place.administrativeArea}, ${place.subAdministrativeArea}, ${place.locality}";
-  } catch (e) {
-    throw Exception("Erro ao obter endereço");
+      return "${place.street}, ${place.administrativeArea}, ${place.subAdministrativeArea}, ${place.locality}";
+    } catch (e) {
+      throw Exception("Erro ao obter endereço");
+    }
   }
 }
