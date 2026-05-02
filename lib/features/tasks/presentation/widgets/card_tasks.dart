@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class CardTasks extends StatelessWidget {
@@ -13,12 +14,18 @@ class CardTasks extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(task.nome, style: TextStyle(fontSize: 18, fontWeight: .w300)),
             Text(
-              task.dataHora.toIso8601String(),
+              "Tarefa: ${task.nome}",
+              style: TextStyle(fontSize: 18, fontWeight: .w500),
+            ),
+            Text(
+              "Data: ${DateFormat("dd/MM/yyyy HH:mm", "pt_BR").format(task.dataHora)}",
               style: TextStyle(fontSize: 16),
             ),
-            Text(task.localizacao.formatted, style: TextStyle(fontSize: 16)),
+            Text(
+              "Localização: ${task.localizacao.formatted}",
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),

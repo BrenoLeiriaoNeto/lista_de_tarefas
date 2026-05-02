@@ -1,8 +1,12 @@
 export 'data/task_repository.dart';
 export 'data/task_storage.dart';
-export 'presentation/pages/tasks_list.dart';
+export 'presentation/pages/tasks_list_page.dart';
+export 'presentation/pages/task_create_page.dart';
 export 'presentation/widgets/card_tasks.dart';
 export 'presentation/widgets/no_tasks.dart';
+export 'presentation/widgets/task_form.dart';
+export 'presentation/widgets/tasks_list.dart';
 export 'domain/task.dart';
 export 'domain/geo_location.dart';
 export '../../core/services/location_service.dart';
+export '../../core/widgets/app_layout.dart';

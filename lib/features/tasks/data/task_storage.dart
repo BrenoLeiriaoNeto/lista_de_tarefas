@@ -1,6 +1,12 @@
 import 'package:lista_de_tarefas/features/tasks/domain/task.dart';
 
 class TaskStorage {
+  static final TaskStorage _instance = TaskStorage._internal();
+
+  factory TaskStorage() => _instance;
+
+  TaskStorage._internal();
+
   final List<Task> _tasks = [];
 
   List<Task> getTasks() => List.unmodifiable(_tasks);
