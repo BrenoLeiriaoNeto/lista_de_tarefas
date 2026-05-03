@@ -9,6 +9,7 @@ class CardTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 4,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         child: Column(

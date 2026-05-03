@@ -11,6 +11,7 @@ class TaskForm extends StatefulWidget {
 }
 
 class _TaskFormState extends State<TaskForm> {
+  bool _isLoadingLocation = false;
   final _formKey = GlobalKey<FormState>();
 
   final _nomeController = TextEditingController();
@@ -46,8 +47,17 @@ class _TaskFormState extends State<TaskForm> {
           const SizedBox(height: 16),
 
           ElevatedButton(
-            onPressed: _pickLocation,
-            child: Text(locationFormatted),
+            onPressed: _isLoadingLocation ? null : _pickLocation,
+            child: _isLoadingLocation
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : Text(locationFormatted),
           ),
 
           const SizedBox(height: 24),
@@ -95,6 +105,7 @@ class _TaskFormState extends State<TaskForm> {
   }
 
   Future<void> _pickLocation() async {
+    setState(() => _isLoadingLocation = true);
     try {
       final pos = await _locationService.getCurrentLocation();
       final address = await _locationService.getAddressFromLocation(pos);
@@ -110,6 +121,8 @@ class _TaskFormState extends State<TaskForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Não foi possível obter a localização: $e")),
       );
+    } finally {
+      setState(() => _isLoadingLocation = false);
     }
   }
 
