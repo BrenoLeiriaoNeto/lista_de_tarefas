@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class TaskForm extends StatefulWidget {
@@ -24,7 +23,7 @@ class _TaskFormState extends State<TaskForm> {
   Widget build(BuildContext context) {
     final dateFormatted = _dataHora == null
         ? "Selecione a data e hora"
-        : DateFormat("dd/MM/yyyy HH:mm", "pt_BR").format(_dataHora!);
+        : brazilDateFormat(_dataHora!);
 
     final locationFormatted =
         _localizacao?.formatted ?? "Usar minha localização atual";
