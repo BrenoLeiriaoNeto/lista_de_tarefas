@@ -10,3 +10,4 @@ export 'domain/task.dart';
 export 'domain/geo_location.dart';
 export '../../core/services/location_service.dart';
 export '../../core/widgets/app_layout.dart';
+export '../../core/widgets/show_delete_confirmation.dart';

@@ -4,7 +4,8 @@ import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class CardTasks extends StatelessWidget {
   final Task task;
-  const CardTasks({super.key, required this.task});
+  final VoidCallback? onDelete;
+  const CardTasks({super.key, required this.task, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,30 @@ class CardTasks extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Tarefa: ${task.nome}",
-              style: TextStyle(fontSize: 18, fontWeight: .w500),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Tarefa: ${task.nome}",
+                  style: TextStyle(fontSize: 18, fontWeight: .w500),
+                ),
+                if (onDelete != null)
+                  IconButton(
+                    onPressed: () async {
+                      final confirm = await showDeleteConfirmation(context);
+
+                      if (confirm == true) {
+                        TaskRepository(TaskStorage()).removeTask(task);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Tarefa removida!")),
+                        );
+
+                        onDelete?.call();
+                      }
+                    },
+                    icon: Icon(Icons.delete, color: Colors.red),
+                  ),
+              ],
             ),
             Text(
               "Data: ${DateFormat("dd/MM/yyyy HH:mm", "pt_BR").format(task.dataHora)}",

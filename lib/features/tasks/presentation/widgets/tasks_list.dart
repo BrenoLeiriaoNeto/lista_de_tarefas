@@ -3,7 +3,8 @@ import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class TasksList extends StatelessWidget {
   final List<Task> tasks;
-  const TasksList({super.key, required this.tasks});
+  final VoidCallback? onDelete;
+  const TasksList({super.key, required this.tasks, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class TasksList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: CardTasks(task: tasks[index]),
+                child: CardTasks(task: tasks[index], onDelete: onDelete),
               );
             },
           );

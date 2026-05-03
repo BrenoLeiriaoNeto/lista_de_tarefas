@@ -33,7 +33,7 @@ class _TasksListPageState extends State<TasksListPage> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
-      child: TasksList(tasks: tasks),
+      child: TasksList(tasks: tasks, onDelete: () => setState(() {})),
     );
   }
 }
