@@ -39,90 +39,64 @@ class _TaskFormState extends State<TaskForm> {
             validator: (value) =>
                 value == null || value.isEmpty ? "Campo obrigatório" : null,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          ElevatedButton(onPressed: _pickDateTime, child: Text(dateFormatted)),
+          FormFieldButton(
+            label: "Data e Hora",
+            value: dateFormatted,
+            icon: Icons.calendar_month,
+            onTap: () async {
+              final result = await pickDateTime(
+                context: context,
+                initialDate: _dataHora ?? DateTime.now(),
+              );
 
-          const SizedBox(height: 16),
-
-          ElevatedButton(
-            onPressed: _isLoadingLocation ? null : _pickLocation,
-            child: _isLoadingLocation
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Text(locationFormatted),
+              if (result != null) {
+                setState(() => _dataHora = result);
+              }
+            },
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          ElevatedButton(
-            onPressed: _submit,
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Colors.blue),
-              foregroundColor: WidgetStatePropertyAll(Colors.white),
+          FormFieldButton(
+            label: "Localização",
+            value: locationFormatted,
+            icon: Icons.location_on,
+            loading: _isLoadingLocation,
+            onTap: () async {
+              setState(() => _isLoadingLocation = true);
+
+              final result = await pickLocation(
+                context: context,
+                locationService: _locationService,
+              );
+
+              if (result != null) {
+                setState(() => _localizacao = result);
+              }
+
+              setState(() => _isLoadingLocation = false);
+            },
+          ),
+
+          const SizedBox(height: 30),
+
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: _submit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+              ),
+              child: const Text("Salvar", style: TextStyle(fontSize: 18)),
             ),
-            child: const Text("Salvar"),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _pickDateTime() async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      locale: const Locale('pt', 'BR'),
-    );
-
-    if (date == null) return;
-
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (time == null) return;
-
-    setState(() {
-      _dataHora = DateTime(
-        date.year,
-        date.month,
-        date.day,
-        time.hour,
-        time.minute,
-      );
-    });
-  }
-
-  Future<void> _pickLocation() async {
-    setState(() => _isLoadingLocation = true);
-    try {
-      final pos = await _locationService.getCurrentLocation();
-      final address = await _locationService.getAddressFromLocation(pos);
-
-      setState(() {
-        _localizacao = GeoLocation(
-          pos.latitude,
-          pos.longitude,
-          address: address,
-        );
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Não foi possível obter a localização: $e")),
-      );
-    } finally {
-      setState(() => _isLoadingLocation = false);
-    }
   }
 
   void _submit() {

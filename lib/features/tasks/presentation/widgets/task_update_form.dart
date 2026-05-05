@@ -46,10 +46,13 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
                 value == null || value.isEmpty ? "Campo obrigatório" : null,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          ElevatedButton(
-            onPressed: () async {
+          FormFieldButton(
+            label: "Data e Hora",
+            value: dateFormatted,
+            icon: Icons.calendar_month,
+            onTap: () async {
               final result = await pickDateTime(
                 context: context,
                 initialDate: _dataHora,
@@ -59,13 +62,16 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
                 setState(() => _dataHora = result);
               }
             },
-            child: Text(dateFormatted),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          ElevatedButton(
-            onPressed: () async {
+          FormFieldButton(
+            label: "Localização",
+            value: locationFormatted,
+            icon: Icons.location_on,
+            loading: _isLoadingLocation,
+            onTap: () async {
               setState(() => _isLoadingLocation = true);
 
               final result = await pickLocation(
@@ -79,23 +85,24 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
               setState(() => _isLoadingLocation = false);
             },
-            child: _isLoadingLocation
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Text(locationFormatted),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 30),
 
-          ElevatedButton(
-            onPressed: _onUpdate,
-            child: const Text("Salvar Alterações"),
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: _onUpdate,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+              ),
+              child: const Text(
+                "Salvar Alterações",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
           ),
         ],
       ),

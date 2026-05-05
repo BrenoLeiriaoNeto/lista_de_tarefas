@@ -18,3 +18,4 @@ export '../../core/services/brazil_date_format.dart';
 export '../../core/widgets/app_layout.dart';
 export '../../core/widgets/show_delete_confirmation.dart';
 export '../../core/widgets/details_field.dart';
+export '../../core/widgets/form_field_button.dart';
