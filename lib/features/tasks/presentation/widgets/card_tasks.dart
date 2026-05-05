@@ -9,7 +9,7 @@ class CardTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: .circular(8),
+      borderRadius: .circular(12),
       onTap: () async {
         final update = await Navigator.push(
           context,
@@ -21,21 +21,32 @@ class CardTasks extends StatelessWidget {
         }
       },
       child: Card(
-        elevation: 4,
+        elevation: 2,
+        shadowColor: Colors.black12,
+        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Tarefa: ${task.nome}",
-                    style: TextStyle(fontSize: 18, fontWeight: .w500),
+                  const Icon(Icons.task_alt, color: Colors.blue, size: 22),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      task.nome,
+                      style: const TextStyle(fontSize: 18, fontWeight: .w600),
+                    ),
                   ),
                   if (onDelete != null)
                     IconButton(
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.red.withValues(alpha: 0.7),
+                      ),
+                      splashRadius: 22,
                       onPressed: () async {
                         final confirm = await showDeleteConfirmation(context);
 
@@ -48,13 +59,41 @@ class CardTasks extends StatelessWidget {
                           onDelete?.call();
                         }
                       },
-                      icon: Icon(Icons.delete, color: Colors.red),
                     ),
                 ],
               ),
-              Text(
-                "Data: ${brazilDateFormat(task.dataHora)}",
-                style: TextStyle(fontSize: 16),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    color: Colors.grey.shade600,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Data: ${brazilDateFormat(task.dataHora)}",
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade700),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.grey.shade600,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    "${task.localizacao.state}, ${task.localizacao.city}",
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade700),
+                  ),
+                ],
               ),
             ],
           ),

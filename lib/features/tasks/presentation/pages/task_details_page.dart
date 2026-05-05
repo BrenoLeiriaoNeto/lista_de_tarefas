@@ -31,8 +31,24 @@ class TaskDetailsPage extends StatelessWidget {
             const SizedBox(height: 20),
 
             DetailsField(
-              label: "Localização",
-              value: task.localizacao.formatted,
+              label: "País",
+              value: task.localizacao.country ?? "",
+              icon: Icons.flag,
+            ),
+
+            const SizedBox(height: 20),
+
+            DetailsField(
+              label: "Cidade",
+              value: task.localizacao.city ?? "",
+              icon: Icons.location_city,
+            ),
+
+            const SizedBox(height: 20),
+
+            DetailsField(
+              label: "Estado",
+              value: task.localizacao.state ?? "",
               icon: Icons.location_on,
             ),
 

@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class LocationService {
-  Future<GeoLocation> getCurrentLocation() async {
+  Future<GeoLocation> getFullLocation() async {
     final permission = await Geolocator.requestPermission();
 
     if (permission == LocationPermission.denied ||
@@ -13,21 +13,25 @@ class LocationService {
 
     final position = await Geolocator.getCurrentPosition();
 
-    return GeoLocation(position.latitude, position.longitude);
-  }
+    final baseLocation = GeoLocation(position.latitude, position.longitude);
 
-  Future<String> getAddressFromLocation(GeoLocation location) async {
-    try {
-      final placemarks = await placemarkFromCoordinates(
-        location.latitude,
-        location.longitude,
-      );
+    final placemarks = await placemarkFromCoordinates(
+      baseLocation.latitude,
+      baseLocation.longitude,
+    );
 
-      final place = placemarks.first;
+    final place = placemarks.first;
 
-      return "${place.street}, ${place.administrativeArea}, ${place.subAdministrativeArea}, ${place.locality}";
-    } catch (e) {
-      throw Exception("Erro ao obter endereço");
-    }
+    final address =
+        "${place.street}, ${place.administrativeArea}, ${place.subAdministrativeArea}, ${place.locality}";
+
+    return GeoLocation(
+      position.latitude,
+      position.longitude,
+      address: address,
+      city: place.locality,
+      country: place.country,
+      state: place.administrativeArea,
+    );
   }
 }

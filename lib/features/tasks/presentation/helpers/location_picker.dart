@@ -6,10 +6,9 @@ Future<GeoLocation?> pickLocation({
   required LocationService locationService,
 }) async {
   try {
-    final pos = await locationService.getCurrentLocation();
-    final address = await locationService.getAddressFromLocation(pos);
+    final location = await locationService.getFullLocation();
 
-    return GeoLocation(pos.latitude, pos.longitude, address: address);
+    return location;
   } catch (e) {
     ScaffoldMessenger.of(
       context,
