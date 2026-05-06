@@ -60,18 +60,7 @@ class TaskDetailsPage extends StatelessWidget {
                   child: ElevatedButton.icon(
                     label: Text("Editar"),
                     icon: const Icon(Icons.edit),
-                    onPressed: () async {
-                      final updated = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => TaskUpdatePage(task: task),
-                        ),
-                      );
-
-                      if (updated == true) {
-                        Navigator.pop(context, true);
-                      }
-                    },
+                    onPressed: () => _handleEdit(context),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -79,17 +68,7 @@ class TaskDetailsPage extends StatelessWidget {
                   child: ElevatedButton.icon(
                     label: const Text("Excluir"),
                     icon: Icon(Icons.delete),
-                    onPressed: () async {
-                      final confirmed = await showDeleteConfirmation(context);
-
-                      if (confirmed == true) {
-                        TaskRepository(TaskStorage()).removeTask(task);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Tarefa removida!")),
-                        );
-                        Navigator.pop(context, true);
-                      }
-                    },
+                    onPressed: () => _handleDelete(context),
                   ),
                 ),
               ],
@@ -98,5 +77,28 @@ class TaskDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleDelete(BuildContext context) async {
+    final confirmed = await showDeleteConfirmation(context);
+
+    if (confirmed == true && context.mounted) {
+      deleteTask(task);
+
+      context.safeSnackBar("Tarefa removida!");
+
+      Navigator.pop(context, true);
+    }
+  }
+
+  void _handleEdit(BuildContext context) async {
+    final updated = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => TaskUpdatePage(task: task)),
+    );
+
+    if (updated == true && context.mounted) {
+      Navigator.pop(context, true);
+    }
   }
 }

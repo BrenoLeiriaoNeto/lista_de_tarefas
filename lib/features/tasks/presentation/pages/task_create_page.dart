@@ -8,9 +8,7 @@ class TaskCreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     void onSubmit(Task task) {
       TaskRepository(TaskStorage()).addTask(task);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Tarefa criada com sucesso!")),
-      );
+      context.safeSnackBar("Tarefa criada!");
       Navigator.pop(context, true);
     }
 

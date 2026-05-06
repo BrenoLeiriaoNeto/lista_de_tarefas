@@ -120,9 +120,7 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
     widget.onUpdate(widget.task, updatedTask);
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Tarefa atualizada!")));
+    context.safeSnackBar("Tarefa atualizada!");
 
     Navigator.pop(context, true);
   }

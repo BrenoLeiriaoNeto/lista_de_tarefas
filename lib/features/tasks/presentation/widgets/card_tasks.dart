@@ -16,7 +16,7 @@ class CardTasks extends StatelessWidget {
           MaterialPageRoute(builder: (_) => TaskDetailsPage(task: task)),
         );
 
-        if (update == true) {
+        if (update == true && context.mounted) {
           onDelete?.call();
         }
       },
@@ -47,18 +47,7 @@ class CardTasks extends StatelessWidget {
                         color: Colors.red.withValues(alpha: 0.7),
                       ),
                       splashRadius: 22,
-                      onPressed: () async {
-                        final confirm = await showDeleteConfirmation(context);
-
-                        if (confirm == true) {
-                          TaskRepository(TaskStorage()).removeTask(task);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Tarefa removida!")),
-                          );
-
-                          onDelete?.call();
-                        }
-                      },
+                      onPressed: () => _handleDelete(context),
                     ),
                 ],
               ),
@@ -100,5 +89,17 @@ class CardTasks extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleDelete(BuildContext context) async {
+    final confirmed = await showDeleteConfirmation(context);
+
+    if (confirmed == true && context.mounted) {
+      deleteTask(task);
+
+      context.safeSnackBar("Tarefa removida!");
+
+      onDelete?.call();
+    }
   }
 }
