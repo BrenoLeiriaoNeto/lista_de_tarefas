@@ -4,6 +4,10 @@ import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class LocationService {
   Future<GeoLocation> getFullLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception("O serviço de localização está desativado.");
+    }
     final permission = await Geolocator.requestPermission();
 
     if (permission == LocationPermission.denied ||
@@ -20,7 +24,10 @@ class LocationService {
       baseLocation.longitude,
     );
 
-    final place = placemarks.first;
+    late Placemark place;
+    if (placemarks.isNotEmpty) {
+      place = placemarks.first;
+    }
 
     final address =
         "${place.street}, ${place.administrativeArea}, ${place.subAdministrativeArea}, ${place.locality}";

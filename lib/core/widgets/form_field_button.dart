@@ -45,10 +45,13 @@ class FormFieldButton extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: loading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                      ? Align(
+                          alignment: .center,
+                          child: const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         )
                       : Text(value, style: TextStyle(fontSize: 16)),
                 ),

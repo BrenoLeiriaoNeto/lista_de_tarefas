@@ -60,6 +60,10 @@ class TaskDetailsPage extends StatelessWidget {
                   child: ElevatedButton.icon(
                     label: Text("Editar"),
                     icon: const Icon(Icons.edit),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                    ),
                     onPressed: () => _handleEdit(context),
                   ),
                 ),
@@ -68,6 +72,10 @@ class TaskDetailsPage extends StatelessWidget {
                   child: ElevatedButton.icon(
                     label: const Text("Excluir"),
                     icon: Icon(Icons.delete),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.red),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                    ),
                     onPressed: () => _handleDelete(context),
                   ),
                 ),

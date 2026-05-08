@@ -112,4 +112,10 @@ class _TaskFormState extends State<TaskForm> {
 
     widget.onSubmit(task);
   }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    super.dispose();
+  }
 }

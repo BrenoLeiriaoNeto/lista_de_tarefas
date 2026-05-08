@@ -10,9 +10,9 @@ Future<GeoLocation?> pickLocation({
 
     return location;
   } catch (e) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Erro ao obter localização: $e")));
+    if (context.mounted) {
+      context.safeSnackBar("Erro ao obter localização: $e");
+    }
     return null;
   }
 }
