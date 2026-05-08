@@ -9,14 +9,33 @@ class TasksListPage extends StatefulWidget {
 }
 
 class _TasksListPageState extends State<TasksListPage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  String _searchQuery = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.toLowerCase();
+      });
+    });
+  }
+
   List<Task> fetchTasks() => TaskRepository(TaskStorage()).getTasks();
 
   @override
   Widget build(BuildContext context) {
-    final tasks = fetchTasks();
+    final allTasks = fetchTasks();
+    final bool hasTasks = allTasks.isNotEmpty;
+    final filteredTasks = allTasks.where((task) {
+      return task.nome.toLowerCase().contains(_searchQuery);
+    }).toList();
 
     return AppLayout(
       title: "Lista de Tarefas",
+      controller: hasTasks ? _searchController : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final created = await Navigator.push(
@@ -33,7 +52,13 @@ class _TasksListPageState extends State<TasksListPage> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
-      child: TasksList(tasks: tasks, onDelete: () => setState(() {})),
+      child: TasksList(tasks: filteredTasks, onDelete: () => setState(() {})),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
