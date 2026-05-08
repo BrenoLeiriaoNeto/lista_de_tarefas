@@ -8,7 +8,28 @@ class CardTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Dismissible(
+      key: Key(task.nome),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: Colors.redAccent,
+          borderRadius: .circular(12),
+        ),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      confirmDismiss: (direction) async {
+        return await showDeleteConfirmation(context);
+      },
+      onDismissed: (direction) {
+        deleteTask(task);
+        context.safeSnackBar("Tarefa removida!");
+        onDelete?.call();
+      },
+      child:
+    InkWell(
       borderRadius: .circular(12),
       onTap: () async {
         final update = await Navigator.push(
@@ -88,6 +109,7 @@ class CardTasks extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 
