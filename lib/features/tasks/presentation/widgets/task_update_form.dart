@@ -124,4 +124,10 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
     Navigator.pop(context, true);
   }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    super.dispose();
+  }
 }
