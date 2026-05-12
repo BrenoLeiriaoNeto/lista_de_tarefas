@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_de_tarefas/core/core_features.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class TaskDetailsPage extends StatelessWidget {
@@ -100,9 +101,10 @@ class TaskDetailsPage extends StatelessWidget {
   }
 
   void _handleEdit(BuildContext context) async {
-    final updated = await Navigator.push(
+    final updated = await Navigator.pushNamed(
       context,
-      MaterialPageRoute(builder: (_) => TaskUpdatePage(task: task)),
+      AppRoutes.taskUpdate,
+      arguments: task,
     );
 
     if (updated == true && context.mounted) {

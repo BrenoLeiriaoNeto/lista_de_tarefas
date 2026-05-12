@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_de_tarefas/core/core_features.dart';
 import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 
 class TasksListPage extends StatefulWidget {
@@ -38,9 +39,9 @@ class _TasksListPageState extends State<TasksListPage> {
       controller: hasTasks ? _searchController : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final created = await Navigator.push(
+          final created = await Navigator.pushNamed(
             context,
-            MaterialPageRoute(builder: (_) => const TaskCreatePage()),
+            AppRoutes.taskCreation,
           );
 
           if (created == true) {
