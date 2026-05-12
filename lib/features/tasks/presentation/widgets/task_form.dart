@@ -82,17 +82,27 @@ class _TaskFormState extends State<TaskForm> {
 
           const SizedBox(height: 30),
 
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-              onPressed: _submit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: .circular(10)),
-              ),
-              child: const Text("Salvar", style: TextStyle(fontSize: 18)),
-            ),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _nomeController,
+            builder: (context, value, child) {
+              final bool isNameFilled = value.text.isNotEmpty;
+              final bool isFormValid =
+                  isNameFilled && _dataHora != null && _localizacao != null;
+              return SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: isFormValid && !_isLoadingLocation
+                      ? _submit
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+                  ),
+                  child: const Text("Salvar", style: TextStyle(fontSize: 18)),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -111,11 +121,5 @@ class _TaskFormState extends State<TaskForm> {
     );
 
     widget.onSubmit(task);
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    super.dispose();
   }
 }

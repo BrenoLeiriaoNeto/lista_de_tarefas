@@ -89,20 +89,29 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
           const SizedBox(height: 30),
 
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-              onPressed: _onUpdate,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: .circular(10)),
-              ),
-              child: const Text(
-                "Salvar Alterações",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+          ValueListenableBuilder(
+            valueListenable: _nomeController,
+            builder: (context, value, child) {
+              final bool isNameFilled = value.text.isNotEmpty;
+              final bool isFormValid = isNameFilled;
+              return SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: isFormValid && !_isLoadingLocation
+                      ? _onUpdate
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+                  ),
+                  child: const Text(
+                    "Salvar Alterações",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -123,11 +132,5 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
     context.safeSnackBar("Tarefa atualizada!");
 
     Navigator.pop(context, true);
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    super.dispose();
   }
 }
