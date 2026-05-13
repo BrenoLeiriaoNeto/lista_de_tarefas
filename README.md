@@ -13,7 +13,6 @@ Um aplicativo móvel elegante e intuitivo para gerenciamento de tarefas pessoais
 - **📍 Localização Integrada**: Associe tarefas a locais específicos usando GPS e geocodificação
 - **🗓️ Agendamento**: Defina datas e horários para suas tarefas
 - **📱 Interface Responsiva**: Design moderno e adaptável para diferentes tamanhos de tela
-- **🌍 Suporte Multi-idioma**: Interface em português brasileiro e inglês
 - **🗑️ Gerenciamento Completo**: Visualize, edite e exclua tarefas facilmente
 - **📊 Detalhes Completos**: Veja informações detalhadas de cada tarefa, incluindo localização formatada
 
@@ -102,6 +101,73 @@ O aplicativo solicita as seguintes permissões:
 - **Localização**: Para associar tarefas a locais específicos
 - **Armazenamento**: Para salvar dados temporariamente (atual implementação usa memória)
 
+## 🧭 Passo a Passo
+
+Siga os passos abaixo para entender a navegação do app. Substitua as imagens de exemplo pelos seus próprios prints.
+
+1. **Tela inicial**
+   - Descrição: Exibe a lista de tarefas atuais e o botão para adicionar nova tarefa.
+
+   <p align="center">
+      <img src="assets/images/Tela_Inicial.png" height="550" alt="Tela inicial" />
+   </p>
+
+   ***
+
+2. **Adicionar nova tarefa**
+   - Descrição: Ao pressionar o botão do canto inferior direito, seremos levados a tela de cadastro de uma nova tarefa. Podemos então preencher os campos e pressionar o botão "Salvar". Isso nos levará devolta a tela inicial, agora com a nova tarefa criada sendo listada.
+
+   <p align="center">
+      <img src="assets/images/Tela_Cadastro_Tarefas.png" height="550" alt="Tela cadastro tarefas" />
+      <img src="assets/images/Tela_Cadastro_Tarefas_Preenchida.png" height="550" alt="Tela cadastro preenchida" />
+      <img src="assets/images/Tela_Listagem.png" height="550" alt="Tela listagem" />
+   </p>
+
+   ***
+
+3. **Detalhes da tarefa**
+   - Descrição: Ao pressionar no card da tarefa, na tela de listagem de tarefas, somos levados a tela de detalhamento da tarefa, contendo informações completas da tarefa selecionada, incluindo localização e opções de edição e exclusão.
+
+   <p align="center">
+      <img src="assets/images/Tela_Listagem.png" height="550" alt="Tela listagem" />
+      <img src="assets/images/Tela_Detalhes_Tarefa.png" height="550" alt="Tela detalhes tarefa" />
+   </p>
+
+   ***
+
+4. **Edição de tarefa**
+   - Descrição: Ainda na tela de detalhamento da tarefa, pressione o botão "Editar". Seremos levados a tela de edição da tarefa selecionada. Alteramos os campos desejados e pressionamos o botão "Salvar alterações" e então somos levados a tela de listagem de tarefas, agora com a tarefa contendo as informações atualizadas. O ultimo print abaixo foi da tela de detalhamento da tarefa, agora com as informações alteradas para melhor visualização.
+
+   <p align="center">
+      <img src="assets/images/Tela_Detalhes_Tarefa.png" height="550" alt="Tela detalhes tarefa" />
+      <img src="assets/images/Tela_Editar_Tarefa.png" height="550" alt="Tela editar tarefa" />
+      <img src="assets/images/Tela_Editar_Tarefa_Modificada.png" height="550" alt="Tela editar tarefa modificada" />
+      <img src="assets/images/Tarefa_Alterada.png" height="550" alt="Tarefa alterada" />
+   </p>
+
+   ***
+
+5. **Listagem e pesquisa de tarefas**
+   - Descrição: Após criarmos mais algumas tarefas, a tela de listagem de tarefas ira ser preenchida com as novas adições. Se olharmos para o topo da tela de listagem, veremos um campo onde nos e permitido fazer a pesquisa de tarefas pelo título delas.
+
+   <p align="center">
+      <img src="assets/images/Tela_Listagem_Maior.png" height="550" alt="Tela listagem maior" />
+      <img src="assets/images/Pesquisa_Tarefa.png" height="550" alt="Pesquisa de tarefa" />
+   </p>
+
+   ***
+
+6. **Excluir tarefa**
+   - Descrição: Para excluir uma tarefa, basta pressionar o icone de lixeira presente no card da tarefa que deseja excluir e confirmar a exclusão. Esta funcionalidade tambem esta presente na tela de detalhamento de tarefa, onde o botão "Excluir" possui o mesmo efeito. Aqui, foi excluida a tarefa "Fazer Trabalho".
+
+   <p align="center">
+      <img src="assets/images/Tela_Listagem_Maior.png" height="550" alt="Tela listagem maior" />
+      <img src="assets/images/Confirma_Exclusao_Tarefa.png" height="550" alt="Confirma exclusão tarefa" />
+      <img src="assets/images/Tarefa_Removida.png" height="550" alt="Tarefa removida" />
+   </p>
+
+   ***
+
 ## 🏗️ Estrutura do Projeto
 
 ```
@@ -109,6 +175,7 @@ lib/
 ├── app.dart                    # Configuração principal do app
 ├── main.dart                   # Ponto de entrada
 ├── core/                       # Componentes compartilhados
+│   ├── router/                 # Roteamento do app
 │   ├── services/               # Serviços utilitários
 │   │   ├── location_service.dart    # Serviço de localização
 │   │   └── brazil_date_format.dart  # Formatação de datas BR
@@ -122,9 +189,9 @@ lib/
 │       │   ├── task.dart            # Modelo Task
 │       │   └── geo_location.dart    # Modelo GeoLocation
 │       └── presentation/       # Camada de apresentação
+│           ├── helpers/        # Utilitários de UI
 │           ├── pages/          # Páginas/screens
-│           ├── widgets/        # Widgets específicos
-│           └── helpers/        # Utilitários de UI
+│           └── widgets/        # Widgets específicos
 ```
 
 ### Arquitetura
@@ -163,25 +230,6 @@ flutter build ios --release
 flutter build web --release
 ```
 
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-### Melhorias Sugeridas
-
-- [ ] Persistência de dados (SQLite/Hive)
-- [ ] Notificações push para lembretes
-- [ ] Sincronização com nuvem
-- [ ] Temas dark/light
-- [ ] Categorias de tarefas
-- [ ] Compartilhamento de tarefas
-
 ## 📄 Licença
 
 Este projeto é parte de um trabalho acadêmico e não possui licença específica para distribuição comercial. Use para fins educacionais.
@@ -189,10 +237,6 @@ Este projeto é parte de um trabalho acadêmico e não possui licença específi
 ## 👨‍💻 Autor
 
 **Breno Leiria Neto** - Desenvolvimento Mobile com Flutter [26E2_2]
-
----
-
-⭐ Se este projeto foi útil, dê uma estrela no GitHub!
 
 ---
 
