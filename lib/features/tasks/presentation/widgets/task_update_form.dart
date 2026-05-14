@@ -37,84 +37,89 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextFormField(
-            controller: _nomeController,
-            decoration: const InputDecoration(labelText: "Tarefa"),
-            validator: (value) =>
-                value == null || value.isEmpty ? "Campo obrigatório" : null,
-          ),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextFormField(
+              controller: _nomeController,
+              decoration: const InputDecoration(labelText: "Tarefa"),
+              validator: (value) =>
+                  value == null || value.isEmpty ? "Campo obrigatório" : null,
+            ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          FormFieldButton(
-            label: "Data e Hora",
-            value: dateFormatted,
-            icon: Icons.calendar_month,
-            onTap: () async {
-              final result = await pickDateTime(
-                context: context,
-                initialDate: _dataHora,
-              );
+            FormFieldButton(
+              label: "Data e Hora",
+              value: dateFormatted,
+              icon: Icons.calendar_month,
+              onTap: () async {
+                final result = await pickDateTime(
+                  context: context,
+                  initialDate: _dataHora,
+                );
 
-              if (result != null) {
-                setState(() => _dataHora = result);
-              }
-            },
-          ),
+                if (result != null) {
+                  setState(() => _dataHora = result);
+                }
+              },
+            ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          FormFieldButton(
-            label: "Localização",
-            value: locationFormatted,
-            icon: Icons.location_on,
-            loading: _isLoadingLocation,
-            onTap: () async {
-              setState(() => _isLoadingLocation = true);
+            FormFieldButton(
+              label: "Localização",
+              value: locationFormatted,
+              icon: Icons.location_on,
+              loading: _isLoadingLocation,
+              onTap: () async {
+                setState(() => _isLoadingLocation = true);
 
-              final result = await pickLocation(
-                context: context,
-                locationService: _locationService,
-              );
+                final result = await pickLocation(
+                  context: context,
+                  locationService: _locationService,
+                );
 
-              if (result != null) {
-                setState(() => _localizacao = result);
-              }
+                if (result != null) {
+                  setState(() => _localizacao = result);
+                }
 
-              setState(() => _isLoadingLocation = false);
-            },
-          ),
+                setState(() => _isLoadingLocation = false);
+              },
+            ),
 
-          const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-          ValueListenableBuilder(
-            valueListenable: _nomeController,
-            builder: (context, value, child) {
-              final bool isNameFilled = value.text.isNotEmpty;
-              final bool isFormValid = isNameFilled;
-              return SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: isFormValid && !_isLoadingLocation
-                      ? _onUpdate
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+            ValueListenableBuilder(
+              valueListenable: _nomeController,
+              builder: (context, value, child) {
+                final bool isNameFilled = value.text.isNotEmpty;
+                final bool isFormValid = isNameFilled;
+                return SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: isFormValid && !_isLoadingLocation
+                        ? _onUpdate
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: .circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      "Salvar Alterações",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                  child: const Text(
-                    "Salvar Alterações",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
