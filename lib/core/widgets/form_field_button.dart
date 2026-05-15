@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class FormFieldButton extends StatelessWidget {
   final String label;
   final String value;
+  final String? subtitle;
   final IconData icon;
   final VoidCallback onTap;
   final bool loading;
@@ -11,6 +12,7 @@ class FormFieldButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.value,
+    this.subtitle,
     required this.icon,
     required this.onTap,
     this.loading = false,
@@ -53,7 +55,23 @@ class FormFieldButton extends StatelessWidget {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           ),
                         )
-                      : Text(value, style: TextStyle(fontSize: 16)),
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              value,
+                              style: TextStyle(fontSize: 16, fontWeight: .w500),
+                            ),
+                            if (subtitle != null)
+                              Text(
+                                subtitle!,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                          ],
+                        ),
                 ),
               ],
             ),

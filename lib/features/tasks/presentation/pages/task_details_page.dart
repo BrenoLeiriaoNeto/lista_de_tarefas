@@ -53,6 +53,14 @@ class TaskDetailsPage extends StatelessWidget {
               icon: Icons.location_on,
             ),
 
+            const SizedBox(height: 20),
+
+            DetailsField(
+              label: "Rua",
+              value: task.localizacao.street ?? "",
+              icon: Icons.house,
+            ),
+
             const SizedBox(height: 30),
 
             Row(

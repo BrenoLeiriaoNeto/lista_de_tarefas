@@ -26,8 +26,10 @@ class _TaskFormState extends State<TaskForm> {
         ? "Selecione a data e hora"
         : brazilDateFormat(_dataHora!);
 
-    final locationFormatted =
-        _localizacao?.formatted ?? "Usar minha localização atual";
+    final mainLocation = _localizacao?.street ?? "Usar minha localização atual";
+    final subLocation = _localizacao != null
+        ? "${_localizacao!.city}, ${_localizacao!.state}"
+        : "Usar minha localização atual";
 
     return Form(
       key: _formKey,
@@ -64,7 +66,8 @@ class _TaskFormState extends State<TaskForm> {
 
             FormFieldButton(
               label: "Localização",
-              value: locationFormatted,
+              value: mainLocation,
+              subtitle: _localizacao != null ? subLocation : null,
               icon: Icons.location_on,
               loading: _isLoadingLocation,
               onTap: () async {

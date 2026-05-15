@@ -39,6 +39,7 @@ class LocationService {
       city: place.locality,
       country: place.country,
       state: place.administrativeArea,
+      street: place.street,
     );
   }
 }
