@@ -5,6 +5,7 @@ class GeoLocation {
   final String? city;
   final String? country;
   final String? state;
+  final String? street;
 
   GeoLocation(
     this.latitude,
@@ -13,6 +14,7 @@ class GeoLocation {
     this.city,
     this.country,
     this.state,
+    this.street,
   });
 
   String get formatted =>

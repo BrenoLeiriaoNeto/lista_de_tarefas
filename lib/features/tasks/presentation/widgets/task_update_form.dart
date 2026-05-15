@@ -33,7 +33,9 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
   @override
   Widget build(BuildContext context) {
     final dateFormatted = brazilDateFormat(_dataHora);
-    final locationFormatted = _localizacao.formatted;
+
+    final mainLocation = _localizacao.street ?? "Usar minha localização";
+    final subLocation = "${_localizacao.city}, ${_localizacao.state}";
 
     return Form(
       key: _formKey,
@@ -71,7 +73,8 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
 
             FormFieldButton(
               label: "Localização",
-              value: locationFormatted,
+              value: mainLocation,
+              subtitle: subLocation,
               icon: Icons.location_on,
               loading: _isLoadingLocation,
               onTap: () async {
