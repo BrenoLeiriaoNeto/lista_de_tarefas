@@ -51,7 +51,7 @@ flutter doctor
 1. **Clone o repositório**:
 
    ```bash
-   git clone https://github.com/seu-usuario/lista-de-tarefas.git
+   git clone https://github.com/BrenoLeiriaoNeto/lista_de_tarefas.git
    cd lista-de-tarefas
    ```
 
