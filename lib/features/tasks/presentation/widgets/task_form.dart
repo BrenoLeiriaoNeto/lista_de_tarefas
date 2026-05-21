@@ -11,10 +11,15 @@ class TaskForm extends StatefulWidget {
 }
 
 class _TaskFormState extends State<TaskForm> {
-  bool _isLoadingLocation = false;
   final _formKey = GlobalKey<FormState>();
 
+  bool _showManualAddressFields = false;
+
   final _nomeController = TextEditingController();
+  final _ruaController = TextEditingController();
+  final _cidadeController = TextEditingController();
+  final _estadoController = TextEditingController();
+  final _paisController = TextEditingController();
   final _locationService = LocationService();
 
   DateTime? _dataHora;
@@ -26,10 +31,11 @@ class _TaskFormState extends State<TaskForm> {
         ? "Selecione a data e hora"
         : brazilDateFormat(_dataHora!);
 
-    final mainLocation = _localizacao?.street ?? "Usar minha localização atual";
+    final mainLocation =
+        _localizacao?.street ?? "Toque para selecionar a localização";
     final subLocation = _localizacao != null
         ? "${_localizacao!.city}, ${_localizacao!.state}"
-        : "Usar minha localização atual";
+        : "Toque para selecionar a localização";
 
     return Form(
       key: _formKey,
@@ -38,9 +44,9 @@ class _TaskFormState extends State<TaskForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextFormField(
+            CustomFormField(
               controller: _nomeController,
-              decoration: const InputDecoration(labelText: "Nome da tarefa"),
+              label: "Nome da tarefa",
               validator: (value) =>
                   value == null || value.isEmpty ? "Campo obrigatório" : null,
             ),
@@ -58,6 +64,8 @@ class _TaskFormState extends State<TaskForm> {
 
                 if (result != null) {
                   setState(() => _dataHora = result);
+
+                  _nomeController.text = _nomeController.text;
                 }
               },
             ),
@@ -69,37 +77,91 @@ class _TaskFormState extends State<TaskForm> {
               value: mainLocation,
               subtitle: _localizacao != null ? subLocation : null,
               icon: Icons.location_on,
-              loading: _isLoadingLocation,
               onTap: () async {
-                setState(() => _isLoadingLocation = true);
-
-                final result = await pickLocation(
+                final result = await showLocationOptionsSheet(
                   context: context,
                   locationService: _locationService,
                 );
 
-                if (result != null) {
-                  setState(() => _localizacao = result);
+                if (result == "MANUAL_MODE") {
+                  setState(() {
+                    _showManualAddressFields = true;
+                    _localizacao = null;
+                    _clearAddressFields();
+                  });
+                } else if (result is GeoLocation) {
+                  setState(() {
+                    _showManualAddressFields = true;
+                    _localizacao = result;
+                    _updateAddressFields(result);
+                  });
                 }
-
-                setState(() => _isLoadingLocation = false);
               },
+            ),
+
+            if (_showManualAddressFields) ...[
+              const SizedBox(height: 10),
+              Divider(color: Colors.grey),
+              const SizedBox(height: 10),
+              CustomFormField(
+                controller: _ruaController,
+                label: "Rua / Logradouro",
+                hint: "Digite o nome da rua",
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Campo obrigatório" : null,
+              ),
+
+              const SizedBox(height: 16),
+
+              CustomFormField(
+                enabled: _localizacao == null ? true : false,
+                controller: _cidadeController,
+                label: "Cidade",
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Campo obrigatório" : null,
+              ),
+              const SizedBox(height: 16),
+
+              CustomFormField(
+                enabled: _localizacao == null ? true : false,
+                controller: _estadoController,
+                label: "Estado / UF",
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Obrigatório" : null,
+              ),
+
+              const SizedBox(height: 16),
+
+              CustomFormField(
+                enabled: _localizacao == null ? true : false,
+                controller: _paisController,
+                label: "País",
+                hint: "Digite o nome do país",
+              ),
+            ],
+
+            Text(
+              "Campos com * são obrigatórios",
+              style: TextStyle(fontSize: 12, color: Colors.redAccent),
             ),
 
             const SizedBox(height: 30),
 
-            ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _nomeController,
-              builder: (context, value, child) {
-                final bool isNameFilled = value.text.isNotEmpty;
-                final bool isFormValid =
-                    isNameFilled && _dataHora != null && _localizacao != null;
+            AnimatedBuilder(
+              animation: Listenable.merge([
+                _nomeController,
+                _ruaController,
+                _cidadeController,
+                _estadoController,
+                _paisController,
+              ]),
+              builder: (context, child) {
+                final bool isFormValid = _validateRequiredFields();
                 return SizedBox(
                   height: 50,
+                  width: .infinity,
                   child: ElevatedButton(
-                    onPressed: isFormValid && !_isLoadingLocation
-                        ? _submit
-                        : null,
+                    onPressed: isFormValid ? _submit : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -118,15 +180,65 @@ class _TaskFormState extends State<TaskForm> {
     );
   }
 
+  void _clearAddressFields() {
+    _ruaController.clear();
+    _cidadeController.clear();
+    _estadoController.clear();
+    _paisController.clear();
+  }
+
+  bool _validateRequiredFields() {
+    if (_nomeController.text.trim().isNotEmpty &&
+        _dataHora != null &&
+        _ruaController.text.trim().isNotEmpty &&
+        _cidadeController.text.trim().isNotEmpty &&
+        _estadoController.text.trim().isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  void _updateAddressFields(GeoLocation location) {
+    _ruaController.text = location.street ?? "";
+    _cidadeController.text = location.city ?? "";
+    _estadoController.text = location.state ?? "";
+    _paisController.text = location.country ?? "";
+  }
+
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     if (_dataHora == null) return;
-    if (_localizacao == null) return;
+
+    String stateFullName = '';
+
+    String inputUf = _estadoController.text.trim();
+    final inputCountry = _localizacao?.country ?? _paisController.text.trim();
+
+    if (inputCountry.toLowerCase().contains("brazil") ||
+        inputCountry.toLowerCase().contains("brasil")) {
+      if (inputUf.length == 2) {
+        stateFullName = convertAbbreviationToState(inputUf);
+      } else {
+        inputUf = convertStateToAbbreviation(inputUf);
+        stateFullName = convertAbbreviationToState(inputUf);
+      }
+    } else {
+      stateFullName = inputUf;
+      inputUf = "";
+    }
+
+    final finalLocation = GeoLocation(
+      street: _ruaController.text.trim(),
+      city: _cidadeController.text.trim(),
+      uf: inputUf,
+      country: inputCountry,
+      state: stateFullName,
+    );
 
     final task = Task(
       nome: _nomeController.text,
       dataHora: _dataHora!,
-      localizacao: _localizacao!,
+      localizacao: finalLocation,
     );
 
     widget.onSubmit(task);

@@ -20,7 +20,6 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
   late GeoLocation _localizacao;
 
   final _locationService = LocationService();
-  bool _isLoadingLocation = false;
 
   @override
   void initState() {
@@ -34,7 +33,8 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
   Widget build(BuildContext context) {
     final dateFormatted = brazilDateFormat(_dataHora);
 
-    final mainLocation = _localizacao.street ?? "Usar minha localização";
+    final mainLocation =
+        _localizacao.street ?? "Toque para selecionar a localização";
     final subLocation = "${_localizacao.city}, ${_localizacao.state}";
 
     return Form(
@@ -76,11 +76,8 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
               value: mainLocation,
               subtitle: subLocation,
               icon: Icons.location_on,
-              loading: _isLoadingLocation,
               onTap: () async {
-                setState(() => _isLoadingLocation = true);
-
-                final result = await pickLocation(
+                final result = await showLocationOptionsSheet(
                   context: context,
                   locationService: _locationService,
                 );
@@ -88,8 +85,6 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
                 if (result != null) {
                   setState(() => _localizacao = result);
                 }
-
-                setState(() => _isLoadingLocation = false);
               },
             ),
 
@@ -103,9 +98,7 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
                 return SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: isFormValid && !_isLoadingLocation
-                        ? _onUpdate
-                        : null,
+                    onPressed: isFormValid ? _onUpdate : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,

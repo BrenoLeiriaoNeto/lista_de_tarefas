@@ -105,9 +105,14 @@ class CardTasks extends StatelessWidget {
                       brazilDateFormat(task.dataHora),
                     ),
                     const SizedBox(width: 16),
-                    _buildInfoChip(
-                      Icons.location_on_outlined,
-                      "${task.localizacao.city}",
+                    Expanded(
+                      child: Align(
+                        alignment: .centerLeft,
+                        child: _buildInfoChip(
+                          Icons.location_on_outlined,
+                          "${task.localizacao.city}",
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -159,15 +164,20 @@ class CardTasks extends StatelessWidget {
         borderRadius: .circular(16),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16, color: _taskStatus(task.dataHora)),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: .w400,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: .w400,
+              ),
             ),
           ),
         ],
