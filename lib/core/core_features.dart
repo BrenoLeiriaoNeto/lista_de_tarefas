@@ -5,4 +5,6 @@ export 'widgets/show_delete_confirmation.dart';
 export 'widgets/details_field.dart';
 export 'widgets/form_field_button.dart';
 export 'widgets/safe_snack_bar.dart';
+export 'widgets/custom_form_field.dart';
+export 'utils/state_mapper.dart';
 export 'router/export_routes.dart';
