@@ -104,7 +104,6 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
                   setState(() {
                     _showManualAddressFields = true;
                     _localizacao = null;
-                    //_clearAddressFields();
                   });
                 } else if (result is GeoLocation) {
                   setState(() {
@@ -198,13 +197,6 @@ class _TaskUpdateFormState extends State<TaskUpdateForm> {
         ),
       ),
     );
-  }
-
-  void _clearAddressFields() {
-    _ruaController.clear();
-    _cidadeController.clear();
-    _estadoController.clear();
-    _paisController.clear();
   }
 
   bool _validateRequiredFields() {
