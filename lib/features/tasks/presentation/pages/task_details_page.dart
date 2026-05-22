@@ -49,7 +49,7 @@ class TaskDetailsPage extends StatelessWidget {
 
             DetailsField(
               label: "Estado",
-              value: task.localizacao.state ?? "",
+              value: getStateDisplay(),
               icon: Icons.location_on,
             ),
 
@@ -94,6 +94,14 @@ class TaskDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getStateDisplay() {
+    if (task.localizacao.uf != null && task.localizacao.uf!.isNotEmpty) {
+      return "${task.localizacao.state} - ${task.localizacao.uf}";
+    } else {
+      return task.localizacao.state ?? "";
+    }
   }
 
   void _handleDelete(BuildContext context) async {

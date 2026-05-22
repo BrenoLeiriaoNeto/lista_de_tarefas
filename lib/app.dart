@@ -11,7 +11,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       initialRoute: AppRoutes.tasksList,
       onGenerateRoute: RouteManager.generateRoute,
-      supportedLocales: const [Locale('en', 'US'), Locale('pt', 'BR')],
+      supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

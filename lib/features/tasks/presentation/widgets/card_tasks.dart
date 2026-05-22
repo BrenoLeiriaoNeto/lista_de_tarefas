@@ -5,9 +5,7 @@ import 'package:lista_de_tarefas/features/tasks/tasks_features.dart';
 class CardTasks extends StatelessWidget {
   final Task task;
   final VoidCallback? onDelete;
-  CardTasks({super.key, required this.task, this.onDelete});
-
-  final DateTime dateNow = DateTime.now();
+  const CardTasks({super.key, required this.task, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +103,14 @@ class CardTasks extends StatelessWidget {
                       brazilDateFormat(task.dataHora),
                     ),
                     const SizedBox(width: 16),
-                    _buildInfoChip(
-                      Icons.location_on_outlined,
-                      "${task.localizacao.city}",
+                    Expanded(
+                      child: Align(
+                        alignment: .centerLeft,
+                        child: _buildInfoChip(
+                          Icons.location_on_outlined,
+                          "${task.localizacao.city}",
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -132,21 +135,28 @@ class CardTasks extends StatelessWidget {
   }
 
   IconData getTaskIcon(DateTime data) {
-    if (data.day.compareTo(dateNow.day) == 0) {
-      return Icons.task_alt;
-    }
-    if (data.isBefore(dateNow)) {
+    final agora = DateTime.now();
+
+    if (data.isBefore(agora)) {
       return Icons.error_outline;
+    }
+    if (data.year == agora.year &&
+        data.month == agora.month &&
+        data.day == agora.day) {
+      return Icons.task_alt;
     }
     return Icons.calendar_today_outlined;
   }
 
   Color _taskStatus(DateTime data) {
-    if (data.day.compareTo(dateNow.day) == 0) {
-      return Colors.lightGreen;
-    }
-    if (data.isBefore(dateNow)) {
+    final agora = DateTime.now();
+    if (data.isBefore(agora)) {
       return Colors.red;
+    }
+    if (data.year == agora.year &&
+        data.month == agora.month &&
+        data.day == agora.day) {
+      return Colors.green;
     }
     return Colors.blue;
   }
@@ -159,15 +169,20 @@ class CardTasks extends StatelessWidget {
         borderRadius: .circular(16),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16, color: _taskStatus(task.dataHora)),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: .w400,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: .w400,
+              ),
             ),
           ),
         ],

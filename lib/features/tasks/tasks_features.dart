@@ -12,5 +12,6 @@ export 'presentation/widgets/tasks_list.dart';
 export 'presentation/helpers/date_time_picker.dart';
 export 'presentation/helpers/location_picker.dart';
 export 'presentation/helpers/delete_task_helper.dart';
+export 'presentation/helpers/show_location_option.dart';
 export 'domain/task.dart';
 export 'domain/geo_location.dart';
